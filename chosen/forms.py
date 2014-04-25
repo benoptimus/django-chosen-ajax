@@ -2,6 +2,8 @@ from django import forms
 from django.db import models
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
+from widgets import ChosenWidgetMixin
+
 from . import fields, widgets
 
 
@@ -13,7 +15,7 @@ class ChosenAdminForm(forms.ModelForm):
         }
         js = (
             'js/chosen.min.js',
-            'js/chosen.ajax.js', 
+            'js/chosen.ajax.js',
             'js/main.js',
         )
 
@@ -24,7 +26,7 @@ class ChosenAdminForm(forms.ModelForm):
             f = self.instance._meta.get_field(field)
             self.fields[field].help_text = f.help_text
             if self.fields[field].__class__.__name__ in ['ChoiceField', 'TypedChoiceField', 'MultipleChoiceField']:
-                self.fields[field].widget = widgets.ChosenSelect(choices=self.fields[field].choices) 
+                self.fields[field].widget = widgets.ChosenSelect(choices=self.fields[field].choices)
             elif self.fields[field].__class__.__name__ in 'ModelChoiceField':
                 self.fields[field].widget = RelatedFieldWidgetWrapper(
                     widgets.ChosenSelect(choices=self.fields[field].choices), self.instance._meta.get_field(field).rel, self.admin_site)
